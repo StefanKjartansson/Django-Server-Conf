@@ -1,0 +1,7 @@
+include INSTALL
+include LICENSE
+include MANIFEST.in
+include README
+recursive-include djserverconf/templates/djserverconf *.html
+global-exclude *.pyc
+global-exclude tests
