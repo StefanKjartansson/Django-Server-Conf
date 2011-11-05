@@ -1,9 +1,3 @@
-import os
-import sys
-
-sys.path.append('/'.join(os.path.abspath(
-    os.path.dirname(__file__)).split('/')[:-1] + ['djserverconf']))
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ADMINS = (
@@ -12,8 +6,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'test.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -79,8 +73,5 @@ LOGGING = {
     }
 }
 
-#SERVER_NAME = "foobar"
-#SERVER_DOMAIN = "foobar.com"
-SERVER_USE_SSL = True
-SERVER_SSL_REWRITE = True
-#APP_ROOT = os.path.dirname(os.path.realpath(__file__))
+SERVER_APP_NAME = "my_django_project"
+SERVER_DOMAIN = "something.com"
