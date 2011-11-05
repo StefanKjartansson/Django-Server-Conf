@@ -15,7 +15,6 @@ class Command(BaseCommand):
 
         Generates server configuration files.
 
-        TODO: docs
            """).strip()
 
     option_list = BaseCommand.option_list + (
@@ -43,25 +42,30 @@ class Command(BaseCommand):
 
         if context['reverse'] == 'uwsgi':
             stream.write('#Auto generated uwsgi supervisor configuration:\n')
-            stream.write(render_to_string('djserverconf/uwsgi_supervisor.conf', context) + '\n')
+            stream.write(render_to_string('djserverconf/uwsgi_supervisor.conf',
+                context) + '\n')
 
         elif context['reverse'] == 'gunicorn':
             stream.write('#Auto generated gunicorn supervisor configuration:\n')
-            stream.write(render_to_string('djserverconf/gunicorn_supervisor.conf', context) + '\n')
+            stream.write(render_to_string('djserverconf/gunicorn_supervisor.conf',
+                context) + '\n')
 
         if context['using_celery']:
             stream.write('#Auto generated celery supervisor configuration:\n')
-            stream.write(render_to_string('djserverconf/celery_supervisor.conf', context) + '\n')
+            stream.write(render_to_string('djserverconf/celery_supervisor.conf',
+                context) + '\n')
 
             if not context.get('disable_celerybeat', False):
                 stream.write('#Auto generated celery_beat supervisor configuration:\n')
-                stream.write(render_to_string('djserverconf/celerybeat_supervisor.conf', context) + '\n')
+                stream.write(render_to_string('djserverconf/celerybeat_supervisor.conf',
+                    context) + '\n')
 
 
     def handle(self, *args, **options):
 
         context = get_server_context()
         if not any(map(options.get, ['nginx', 'apache', 'supervisor'])):
+
             import pprint
             pp = pprint.PrettyPrinter(indent=4, stream=self.stdout)
             self.stdout.write('Auto-detected server context:\n')
@@ -69,23 +73,27 @@ class Command(BaseCommand):
 
             self.stdout.write(('-' * 80) + '\n')
             self.stdout.write('Auto generated nginx configuration example:\n')
-            self.stdout.write(render_to_string('djserverconf/nginx.conf', context) + '\n')
+            self.stdout.write(render_to_string('djserverconf/nginx.conf',
+                context) + '\n')
             self.stdout.write(('-' * 80) + '\n')
 
             self.stdout.write('Auto generated apache configuration example:\n')
-            self.stdout.write(render_to_string('djserverconf/apache.conf', context) + '\n')
+            self.stdout.write(render_to_string('djserverconf/apache.conf',
+                context) + '\n')
             self.stdout.write(('-' * 80) + '\n')
 
             self.handle_supervisor(context)
 
         if options['nginx']:
-            with open('%s_nginx.conf' % context['name'], 'w') as f:
-                f.write(render_to_string('djserverconf/nginx.conf', context))
+            with open('%s-nginx.conf' % context['name'], 'w') as f:
+                f.write(render_to_string('djserverconf/nginx.conf',
+                    context))
 
         if options['supervisor']:
-            with open('%s_sv.conf' % context['name'], 'w') as f:
+            with open('%s-supervisor.conf' % context['name'], 'w') as f:
                 self.handle_supervisor(context, f)
 
         if options['apache']:
-            with open('%s_apache' % context['name'], 'w') as f:
-                f.write(render_to_string('djserverconf/apache.conf', context))
+            with open('%s-apache' % context['name'], 'w') as f:
+                f.write(render_to_string('djserverconf/apache.conf',
+                    context))
