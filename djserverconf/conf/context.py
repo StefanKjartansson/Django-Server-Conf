@@ -1,10 +1,12 @@
 import os
 import sys
 
-from django.conf import settings
+from django.conf import settings as _settings
 
 
 def get_server_context(**kwargs):
+
+    settings = kwargs.pop('settings', _settings)
 
     context = {
         'name': getattr(settings, 'SERVER_APP_NAME',
@@ -31,11 +33,12 @@ def get_server_context(**kwargs):
         'using_celery': ('djcelery' in settings.INSTALLED_APPS),
         'disable_celerybeat': getattr(settings,
             'SERVER_DISABLE_CELERYBEAT', False),
+
     }
 
     context.update({
         'upstream_std_log_path': getattr(settings,
-            'SERVER_UPSTREAM_LOGPATH',
+            'SERVER_ROOT_LOG',
             '/var/log/%s' % context['name']),
     })
 
